@@ -1,12 +1,24 @@
 const express = require("express");
-
-const shopController = require("./src/queries");
+const session = require("express-session");
+const hbs = require("hbs");
+const path = require("path");
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const shopController = require("./controllers/queries");
 
-app.get("/shop", shopController.getPurchase);
+app.use(
+  session({
+    secret: "shop cart",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "/views"));
+
+app.get("/cart/add/:id", shopController.addToCart);
+app.get("/", shopController.getProducts);
 
 app.listen(5000, () => {
   console.log("Server listening on port 5000");

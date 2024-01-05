@@ -88,6 +88,35 @@ const minusCartItem = (req, res) => {
   res.redirect("/cart");
 };
 
+const buyProducts = (req, res) => {
+  db.pool.query(
+    `INSERT INTO shop_purchase (person, address, date) VALUES ('${
+      req.body.buyerName
+    }', '${req.body.address}', '${new Date().toUTCString()}') RETURNING id`,
+    (err, result) => {
+      if (err) {
+        throw err;
+      }
+      buyProductsItems(req, result.rows[0].id);
+      res.send("Товары успешно куплены!");
+    }
+  );
+};
+
+const buyProductsItems = (req, purchaseId) => {
+  const cart = req.session.cart ?? [];
+  cart.forEach((item) => {
+    db.pool.query(
+      `INSERT INTO shop_purchaseitem (quantity, product_id, purchase_id) VALUES ('${item.quantity}', '${item.id}', '${purchaseId}') RETURNING id`,
+      (err, result) => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getProducts,
   addToCart,
@@ -95,4 +124,5 @@ module.exports = {
   getCartProducts,
   plusCartItem,
   minusCartItem,
+  buyProducts,
 };

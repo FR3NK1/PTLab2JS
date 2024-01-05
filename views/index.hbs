@@ -10,7 +10,7 @@
 <body style="background-color: #22272E;">
     <nav class="navbar" style="background-color: #1C2128;">
         <div class="container-fluid">
-          <a class="navbar-brand text-white" href="/">Магазин "Стол, стул, табурет"{{session}}</a>
+          <a class="navbar-brand text-white" href="/">Магазин "Стол, стул, табурет"</a>
           <a href="/cart" class="btn btn-outline-light">Корзина</a>
         </div>
     </nav>
@@ -23,13 +23,13 @@
                             <i class="ti ti-box-seam text-white" style="font-size: 160px;"></i>
                         </div>
                         <div class="card-body">
-                          <h5 class="card-title">{{name}}</h5>
-                          <p class="card-text">{{price}} руб.</p>
-                          {{!-- {% if p.id in products_in_cart %}
-                          <a href="{% url 'delete_from_cart' p.id %}" class="btn btn-primary">Убрать из корзины</a>
-                          {% else %}
-                          {% endif %} --}}
+                            <h5 class="card-title">{{name}}</h5>
+                            <p class="card-text">{{price}} руб.</p>
+                            {{#if isInCart}}
+                            <a href="/cart/delete/{{id}}" class="btn btn-primary">Убрать из корзины</a>
+                            {{else}}
                             <a href="/cart/add/{{id}}" class="btn btn-primary">Добавить в корзину</a>
+                            {{/if}}
                         </div>
                       </div>
                 </div>
